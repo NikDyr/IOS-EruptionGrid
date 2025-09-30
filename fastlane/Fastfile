@@ -11,7 +11,7 @@ platform :ios do
     in_house: false # optional but may be required if using match/sigh
   )
 
-    pilot(api_key: api_key)
+    #pilot(api_key: api_key)
 
     setup_ci if ENV['CI']
     match(type: 'appstore',
