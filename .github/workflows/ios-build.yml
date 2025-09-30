@@ -67,8 +67,8 @@ jobs:
             bundle exec pod install --project-directory="$XCODE_PROJECT_PATH"
           fi
 
-      - name: Run Fastlane (release lane, upload to App Store Connect)
-        run: bundle exec fastlane ios release
+      - name: Run Fastlane (beta lane, upload to TestFlight)
+        run: bundle exec fastlane ios beta
         working-directory: ${{ env.XCODE_PROJECT_PATH }}
         env:
           APP_STORE_CONNECT_USERNAME: ${{ secrets.APPLE_CONNECT_EMAIL }}
