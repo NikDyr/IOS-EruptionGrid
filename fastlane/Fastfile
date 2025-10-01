@@ -1,23 +1,26 @@
 platform :ios do
   lane :beta do
     api_key = app_store_connect_api_key(
-    key_id: ENV["APPSTORE_KEY_ID"],
-    issuer_id: ENV["APPSTORE_ISSUER_ID"],
-    key_content: ENV['APPSTORE_P8'],
-    duration: 1200, # optional (maximum 1200)
-    in_house: false # optional but may be required if using match/sigh
-  )
-
-    #pilot(api_key: api_key)
+      key_id: ENV["APPSTORE_KEY_ID"],
+      issuer_id: ENV["APPSTORE_ISSUER_ID"],
+      key_content: ENV['APPSTORE_P8'],
+      duration: 1200,
+      in_house: false
+    )
 
     setup_ci if ENV['CI']
-    match_org, match_repo = (ENV["MATCH_REPOSITORY"]||"").split("/")
+    match_org, match_repo = (ENV["MATCH_REPOSITORY"] || "").split("/")
+
+    require 'base64'
+    if match_org && ENV['GH_PAT']
+      ENV['MATCH_GIT_BASIC_AUTHORIZATION'] = Base64.strict_encode64("#{match_org}:#{ENV['GH_PAT']}")
+    end
 
     match(
       type: "appstore",
       storage_mode: "git",
       git_url: "git@github.com:#{match_org}/#{match_repo}.git",
-      #app_identifier: [main_app_bundle_id, extension_bundle_id],
+      git_private_key: ENV["MATCH_GIT_PRIVATE_KEY"],
       app_identifier: [ENV["IOS_BUNDLE_ID"]],
       readonly: false
     )
