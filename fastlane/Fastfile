@@ -11,10 +11,18 @@ platform :ios do
     #pilot(api_key: api_key)
 
     setup_ci if ENV['CI']
-    match_org, match_repo = (ENV["MATCH_REPOSITORY"]||"").split("/")
-    match(type: 'appstore',
-          git_basic_authorization: Base64.encode64("#{ENV['GH_PAT']}:x-oauth-basic").strip,
-          git_url: "https://github.com/#{match_org}/#{match_repo}.git",)
+
+    get_certificates(
+      api_key: api_key,
+      type: "distribution" # or "development" if needed
+    )
+
+    get_provisioning_profile(
+      api_key: api_key,
+      app_identifier: ENV["IOS_BUNDLE_ID"],
+      type: "appstore"
+    )
+
     build_app
     upload_to_testflight(skip_waiting_for_build_processing: true)
   end
