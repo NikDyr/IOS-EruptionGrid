@@ -13,8 +13,7 @@ platform :ios do
     setup_ci if ENV['CI']
 
     get_certificates(
-      api_key: api_key,
-      type: "distribution" # or "development" if needed
+      api_key: api_key      
     )
 
     get_provisioning_profile(
