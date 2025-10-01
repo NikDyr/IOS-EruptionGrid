@@ -12,6 +12,10 @@ platform :ios do
 
     setup_ci if ENV['CI']
 
+    cert(api_key: api_key,
+        username: ENV["APPLE_CONNECT_EMAIL"])
+    sigh(force: true)
+
     get_certificates(
       api_key: api_key,
       username: ENV["APPLE_CONNECT_EMAIL"],     
