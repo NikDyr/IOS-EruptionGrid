@@ -15,6 +15,7 @@ platform :ios do
 
     setup_ci if ENV['CI']
     match(type: 'appstore',
+          git_basic_authorization: Base64.encode64("#{ENV['GH_PAT']}:x-oauth-basic").strip,
           git_url: "https://github.com/#{match_org}/#{match_repo}.git",)
     build_app
     upload_to_testflight(skip_waiting_for_build_processing: true)
